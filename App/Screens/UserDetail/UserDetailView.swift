@@ -6,6 +6,7 @@
 //
 
 import DataKit
+import SDWebImageSwiftUI
 import SwiftUI
 
 struct UserDetailView: View {
@@ -13,10 +14,19 @@ struct UserDetailView: View {
 
     var body: some View {
         ScrollView {
-            AsyncImage(url: URL(string: user.pictureMediumURL))
+            WebImage(url: URL(string: user.pictureMediumURL)) { image in
+                   image.resizable()
+               } placeholder: {
+                   ProgressView()
+                       .tint(Color.black)
+                       .progressViewStyle(.circular)
+               }
+               .transition(.fade(duration: 0.5))
+               .scaledToFit()
+               .frame(width: 44, height: 44, alignment: .center)
             VStack {
                 Divider()
-                Text("Contact")
+                Text(Localization.contact)
                     .font(.headline)
 
                 Text(user.email)
@@ -25,7 +35,7 @@ struct UserDetailView: View {
 
             VStack {
                 Divider()
-                Text("Details")
+                Text(Localization.details)
                     .font(.headline)
 
                 Text(String(user.age))
@@ -36,6 +46,13 @@ struct UserDetailView: View {
         }
         .navigationTitle(user.fullName)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+extension UserDetailView {
+    private enum Localization {
+        static let contact = String(localized: "userDetail.contact")
+        static let details = String(localized: "userDetail.details")
     }
 }
 

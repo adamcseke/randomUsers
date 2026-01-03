@@ -17,47 +17,43 @@ struct UserListView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Prospect.id) var prospects: [Prospect]
 
+    private var displayedUsers: [User] {
+        if showSavedUsersOnly {
+            return prospects.map { $0.toUser }
+        } else {
+            return viewModel.users
+        }
+    }
+    
+    private var savedUsersSubtitleText: Text {
+        let formatString = String(localized: "userList.savedUsersSubtitle")
+        let formattedString = String.localizedStringWithFormat(formatString, prospects.count)
+        return Text(formattedString)
+    }
+
     var body: some View {
         List {
-            ForEach(showSavedUsersOnly ? prospects.map { $0.toUser } : viewModel.users) { user in
-                HStack {
-                    NavigationLink {
-                        UserDetailView(user: user)
-                    } label: {
-                        WebImage(url: URL(string: user.pictureMediumURL)) { image in
-                               image.resizable()
-                           } placeholder: {
-                               ProgressView()
-                                   .tint(Color.black)
-                                   .progressViewStyle(.circular)
-                           }
-                           .transition(.fade(duration: 0.5))
-                           .scaledToFit()
-                           .frame(width: 44, height: 44, alignment: .center)
-                        Text(user.fullName)
+            ForEach(displayedUsers) { user in
+                UserRow(user: user)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button(role: .destructive) {
+                            if let existingProspect = prospects.first(where: { $0.id == user.id }) {
+                                modelContext.delete(existingProspect)
+                            }
+                        }
                     }
-                    .listStyle(.plain)
-
-                    Button("", systemImage: prospects.contains(where: { $0.id == user.id }) ? "heart.fill" : "heart") {
-                        if let existingProspect = prospects.first(where: { $0.id == user.id }) {
-                            modelContext.delete(existingProspect)
-                        } else {
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button(role: .confirm) {
                             let prospect = Prospect(from: user)
                             modelContext.insert(prospect)
+                        } label: {
+                            Text(Localization.addToFavorites)
                         }
+                        .tint(Color.green)
                     }
-                    .buttonStyle(.plain)
-                }
-                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                    Button(role: .destructive) {
-                        if let existingProspect = prospects.first(where: { $0.id == user.id }) {
-                            modelContext.delete(existingProspect)
-                        }
+                    .onAppear {
+                        viewModel.loadNextIfNeeded(listItem: user)
                     }
-                }
-                .onAppear {
-                    viewModel.loadNextIfNeeded(listItem: user)
-                }
             }
             if viewModel.isLoading {
                 ProgressView()
@@ -66,6 +62,7 @@ struct UserListView: View {
                     .progressViewStyle(.circular)
             }
         }
+        .accessibilityIdentifier(Identifiers.listIdentifier)
         .refreshable {
             viewModel.fetchUsers()
         }
@@ -73,16 +70,16 @@ struct UserListView: View {
             viewModel.fetchUsers()
         }
         .navigationTitle(Localization.title)
-        .navigationSubtitle(Text("\(prospects.count) Saved users"))
+        .navigationSubtitle(savedUsersSubtitleText)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Button(action: {
                         showSavedUsersOnly.toggle()
                     }, label: {
-                        Label(showSavedUsersOnly ? "Show all users" : "Show only saved users", systemImage: "filter")
+                        Label(showSavedUsersOnly ? Localization.showAllUsers : Localization.showOnlySavedUsers, systemImage: "filter")
                     })
-                    .accessibilityIdentifier(Identifiers.moreButton)
+                    .accessibilityIdentifier(Identifiers.moreButtonIdentifier)
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -94,11 +91,15 @@ struct UserListView: View {
 extension UserListView {
     private enum Localization {
         static let title = String(localized: "userList.title")
+        static let addToFavorites = String(localized: "userList.addToFavorites")
+        static let savedUsersSubtitle = String(localized: "userList.savedUsersSubtitle")
+        static let showAllUsers = String(localized: "Show all users")
+        static let showOnlySavedUsers = String(localized: "Show only saved users")
     }
 
     private enum Identifiers {
-        static let list = "user-list"
-        static let moreButton = "users-list-more"
+        static let listIdentifier = "user-list"
+        static let moreButtonIdentifier = "users-list-more"
     }
 }
 
