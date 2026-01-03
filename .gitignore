@@ -37,3 +37,4 @@ fastlane/screenshots
 fastlane/test_output
 UserInterfaceState.xcuserstate
 xcuserdata/
+.DS_Store
