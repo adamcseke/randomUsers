@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct RandomUsersApp: App {
@@ -15,5 +16,6 @@ struct RandomUsersApp: App {
                 UserListView()
             }
         }
+        .modelContainer(for: Prospect.self)
     }
 }
