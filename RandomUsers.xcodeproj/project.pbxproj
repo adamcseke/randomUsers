@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		371193E42F0406DF00C7CDC0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 371193E32F0406DF00C7CDC0 /* Factory */; };
 		371194522F084DC700C7CDC0 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 371194512F084DC700C7CDC0 /* SDWebImageSwiftUI */; };
+		37D0E9F52F0944E400F7C158 /* DataKit in Frameworks */ = {isa = PBXBuildFile; productRef = 37D0E9F42F0944E400F7C158 /* DataKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,9 +36,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		3711939C2F04069F00C7CDC0 /* RandomUsers */ = {
+		3711939C2F04069F00C7CDC0 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RandomUsers;
+			path = App;
 			sourceTree = "<group>";
 		};
 		371193AC2F0406A000C7CDC0 /* RandomUsersTests */ = {
@@ -50,6 +51,11 @@
 			path = RandomUsersUITests;
 			sourceTree = "<group>";
 		};
+		371194D82F093F9D00C7CDC0 /* Packages */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Packages;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37D0E9F52F0944E400F7C158 /* DataKit in Frameworks */,
 				371194522F084DC700C7CDC0 /* SDWebImageSwiftUI in Frameworks */,
 				371193E42F0406DF00C7CDC0 /* Factory in Frameworks */,
 			);
@@ -82,7 +89,8 @@
 		371193912F04069F00C7CDC0 = {
 			isa = PBXGroup;
 			children = (
-				3711939C2F04069F00C7CDC0 /* RandomUsers */,
+				3711939C2F04069F00C7CDC0 /* App */,
+				371194D82F093F9D00C7CDC0 /* Packages */,
 				371193AC2F0406A000C7CDC0 /* RandomUsersTests */,
 				371193B62F0406A000C7CDC0 /* RandomUsersUITests */,
 				3711939B2F04069F00C7CDC0 /* Products */,
@@ -115,12 +123,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				3711939C2F04069F00C7CDC0 /* RandomUsers */,
+				3711939C2F04069F00C7CDC0 /* App */,
+				371194D82F093F9D00C7CDC0 /* Packages */,
 			);
 			name = RandomUsers;
 			packageProductDependencies = (
 				371193E32F0406DF00C7CDC0 /* Factory */,
 				371194512F084DC700C7CDC0 /* SDWebImageSwiftUI */,
+				37D0E9F42F0944E400F7C158 /* DataKit */,
 			);
 			productName = RandomUsers;
 			productReference = 3711939A2F04069F00C7CDC0 /* RandomUsers.app */;
@@ -207,6 +217,7 @@
 			packageReferences = (
 				371193E22F0406DF00C7CDC0 /* XCRemoteSwiftPackageReference "Factory" */,
 				371194502F084DC700C7CDC0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				37D0E9F32F0944E400F7C158 /* XCLocalSwiftPackageReference "Packages/DataKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3711939B2F04069F00C7CDC0 /* Products */;
@@ -629,6 +640,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		37D0E9F32F0944E400F7C158 /* XCLocalSwiftPackageReference "Packages/DataKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/DataKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		371193E22F0406DF00C7CDC0 /* XCRemoteSwiftPackageReference "Factory" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -658,6 +676,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 371194502F084DC700C7CDC0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		37D0E9F42F0944E400F7C158 /* DataKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DataKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
