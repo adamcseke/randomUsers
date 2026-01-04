@@ -7,14 +7,18 @@
 
 import SwiftUI
 import SwiftData
+import SystemNotification
 
 @main
 struct RandomUsersApp: App {
+    @StateObject private var notification = SystemNotificationContext()
+
     var body: some Scene {
         WindowGroup {
             NavigationStack {
                 UserListView()
             }
+            .systemNotification(notification)
         }
         .modelContainer(for: Prospect.self)
     }

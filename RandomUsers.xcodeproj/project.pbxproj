@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		371193E42F0406DF00C7CDC0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 371193E32F0406DF00C7CDC0 /* Factory */; };
 		371194522F084DC700C7CDC0 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 371194512F084DC700C7CDC0 /* SDWebImageSwiftUI */; };
+		37636F082F0A65E000AE9022 /* SystemNotification in Frameworks */ = {isa = PBXBuildFile; productRef = 37636F072F0A65E000AE9022 /* SystemNotification */; };
 		37D0E9F52F0944E400F7C158 /* DataKit in Frameworks */ = {isa = PBXBuildFile; productRef = 37D0E9F42F0944E400F7C158 /* DataKit */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 			files = (
 				37D0E9F52F0944E400F7C158 /* DataKit in Frameworks */,
 				371194522F084DC700C7CDC0 /* SDWebImageSwiftUI in Frameworks */,
+				37636F082F0A65E000AE9022 /* SystemNotification in Frameworks */,
 				371193E42F0406DF00C7CDC0 /* Factory in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,6 +133,7 @@
 				371193E32F0406DF00C7CDC0 /* Factory */,
 				371194512F084DC700C7CDC0 /* SDWebImageSwiftUI */,
 				37D0E9F42F0944E400F7C158 /* DataKit */,
+				37636F072F0A65E000AE9022 /* SystemNotification */,
 			);
 			productName = RandomUsers;
 			productReference = 3711939A2F04069F00C7CDC0 /* RandomUsers.app */;
@@ -218,6 +221,7 @@
 				371193E22F0406DF00C7CDC0 /* XCRemoteSwiftPackageReference "Factory" */,
 				371194502F084DC700C7CDC0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				37D0E9F32F0944E400F7C158 /* XCLocalSwiftPackageReference "Packages/DataKit" */,
+				37636F062F0A65E000AE9022 /* XCRemoteSwiftPackageReference "SystemNotification" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3711939B2F04069F00C7CDC0 /* Products */;
@@ -664,6 +668,14 @@
 				minimumVersion = 3.1.4;
 			};
 		};
+		37636F062F0A65E000AE9022 /* XCRemoteSwiftPackageReference "SystemNotification" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielsaidi/SystemNotification";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -676,6 +688,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 371194502F084DC700C7CDC0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		37636F072F0A65E000AE9022 /* SystemNotification */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 37636F062F0A65E000AE9022 /* XCRemoteSwiftPackageReference "SystemNotification" */;
+			productName = SystemNotification;
 		};
 		37D0E9F42F0944E400F7C158 /* DataKit */ = {
 			isa = XCSwiftPackageProductDependency;

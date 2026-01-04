@@ -9,19 +9,22 @@ import DataKit
 import SwiftUI
 import SwiftData
 import SDWebImageSwiftUI
+import SystemNotification
 
 struct UserListView: View {
-    @State private var viewModel = UserListViewModel()
-    @State private var showSavedUsersOnly: Bool = false
+    @EnvironmentObject private var notification: SystemNotificationContext
 
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Prospect.id) var prospects: [Prospect]
 
+    @State private var viewModel = UserListViewModel()
+    @State private var showSavedUsersOnly: Bool = false
+
     private var displayedUsers: [User] {
         if showSavedUsersOnly {
-            return prospects.map { $0.toUser }
+            prospects.map { $0.toUser }
         } else {
-            return viewModel.users
+            viewModel.users
         }
     }
     
@@ -29,6 +32,13 @@ struct UserListView: View {
         let formatString = String(localized: "userList.savedUsersSubtitle")
         let formattedString = String.localizedStringWithFormat(formatString, prospects.count)
         return Text(formattedString)
+    }
+
+    private var usersStateSwitchNotificationContent: some View {
+        SystemNotificationMessage(
+            text: showSavedUsersOnly ? "userList.notification.allUsers.title" : "userList.notification.onlySavedUsers.title"
+        )
+        .systemNotificationMessageStyle(.success)
     }
 
     var body: some View {
@@ -83,6 +93,11 @@ struct UserListView: View {
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
+            }
+        }
+        .onChange(of: showSavedUsersOnly) { oldValue, newValue in
+            notification.present {
+                usersStateSwitchNotificationContent
             }
         }
     }
