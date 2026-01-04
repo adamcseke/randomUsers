@@ -10,20 +10,20 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 struct UserDetailView: View {
-    var user: User
+    var user: DataKit.User
 
     var body: some View {
         ScrollView {
-            WebImage(url: URL(string: user.pictureMediumURL)) { image in
+            WebImage(url: URL(string: user.pictureLargeURL)) { image in
                    image.resizable()
                } placeholder: {
-                   ProgressView()
-                       .tint(Color.black)
-                       .progressViewStyle(.circular)
+                   Image(systemName: "person.circle.fill")
+                       .resizable()
                }
+               .clipShape(.circle)
                .transition(.fade(duration: 0.5))
                .scaledToFit()
-               .frame(width: 44, height: 44, alignment: .center)
+               .frame(width: 88, height: 88, alignment: .center)
             VStack {
                 Divider()
                 Text(Localization.contact)
@@ -58,6 +58,6 @@ extension UserDetailView {
 
 #Preview {
     NavigationStack {
-        UserDetailView(user: User.mockUser)
+        UserDetailView(user: DataKit.User.mockUser)
     }
 }

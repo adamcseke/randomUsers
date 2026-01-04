@@ -1,5 +1,5 @@
 //
-//  UserModel.swift
+//  CachedUser.swift
 //  RandomUsers
 //
 //  Created by Adam Cseke on 2026. 01. 02..
@@ -8,7 +8,7 @@
 import SwiftData
 
 @Model
-class Prospect {
+class CachedUser {
     var id: String
     var firstName: String
     var lastName: String
@@ -27,8 +27,9 @@ class Prospect {
     var streetName: String
     var streetNumber: Int
     var cell: String
+    var isFavorite: Bool
 
-    init(id: String, firstName: String, lastName: String, email: String, gender: String, phone: String, age: Int, nationality: String, birthday: String, pictureMediumURL: String, pictureLargeURL: String, city: String, state: String, country: String, postcode: String, streetName: String, streetNumber: Int, cell: String) {
+    init(id: String, firstName: String, lastName: String, email: String, gender: String, phone: String, age: Int, nationality: String, birthday: String, pictureMediumURL: String, pictureLargeURL: String, city: String, state: String, country: String, postcode: String, streetName: String, streetNumber: Int, cell: String, isFavorite: Bool = false) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -47,5 +48,7 @@ class Prospect {
         self.streetName = streetName
         self.streetNumber = streetNumber
         self.cell = cell
+        self.isFavorite = isFavorite
     }
 }
+

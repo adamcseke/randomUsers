@@ -20,6 +20,6 @@ struct RandomUsersApp: App {
             }
             .systemNotification(notification)
         }
-        .modelContainer(for: Prospect.self)
+        .modelContainer(for: CachedUser.self)
     }
 }

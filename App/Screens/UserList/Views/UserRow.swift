@@ -12,12 +12,17 @@ import SwiftUI
 
 struct UserRow: View {
     @Environment(\.modelContext) var modelContext
-    @Query(sort: \Prospect.id) var prospects: [Prospect]
+    @Query(sort: \CachedUser.id) var cachedUsers: [CachedUser]
 
     @State var user: User
-    
+    @State private var favoriteState: Bool = false
+
+    private var isFavorite: Bool {
+        cachedUsers.first(where: { $0.id == user.id })?.isFavorite ?? false
+    }
+
     private var heartIcon: String {
-        prospects.contains(where: { $0.id == user.id }) ? "heart.fill" : "heart"
+        isFavorite ? "heart.fill" : "heart"
     }
 
     var body: some View {
@@ -26,33 +31,60 @@ struct UserRow: View {
                 UserDetailView(user: user)
             } label: {
                 WebImage(url: URL(string: user.pictureMediumURL)) { image in
-                       image.resizable()
-                   } placeholder: {
-                       ProgressView()
-                           .tint(Color.black)
-                           .progressViewStyle(.circular)
-                   }
-                   .transition(.fade(duration: 0.5))
-                   .scaledToFit()
-                   .frame(width: 44, height: 44, alignment: .center)
+                    image.resizable()
+                } placeholder: {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                }
+                .clipShape(.circle)
+                .transition(.fade(duration: 0.5))
+                .scaledToFit()
+                .frame(width: 44, height: 44, alignment: .center)
                 Text(user.fullName)
             }
-            .listStyle(.plain)
+            .navigationLinkIndicatorVisibility(.hidden)
+            .padding(.leading, 12)
 
-            Button("", systemImage: heartIcon) {
-                if let existingProspect = prospects.first(where: { $0.id == user.id }) {
-                    modelContext.delete(existingProspect)
+            Spacer()
+
+            Button {
+                let wasFavorite = isFavorite
+
+                if let cachedUser = cachedUsers.first(where: { $0.id == user.id }) {
+                    cachedUser.isFavorite.toggle()
                 } else {
-                    let prospect = Prospect(from: user)
-                    modelContext.insert(prospect)
+                    let newUser = CachedUser(from: user, isFavorite: true)
+                    modelContext.insert(newUser)
                 }
+
+                favoriteState = !wasFavorite
+            } label: {
+                Image(systemName: heartIcon)
+                    .resizable()
+                    .foregroundStyle(Color.primaryOrange)
+                    .frame(width: 24, height: 24)
             }
+            .padding(.trailing, 24)
             .buttonStyle(.plain)
+            .sensoryFeedback(.selection, trigger: favoriteState)
+        }
+        .onAppear {
+            favoriteState = isFavorite
+        }
+        .onChange(of: isFavorite) { oldValue, newValue in
+            favoriteState = newValue
         }
     }
 }
 
 #Preview {
     UserRow(user: User.mockUser)
-        .modelContainer(for: Prospect.self)
+        .modelContainer(for: CachedUser.self)
+}
+
+#Preview {
+    NavigationStack {
+        UserListView()
+    }
+    .modelContainer(for: CachedUser.self)
 }

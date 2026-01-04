@@ -1,7 +1,7 @@
 import DataKit
 
-extension Prospect {
-    convenience init(from user: User) {
+extension CachedUser {
+    convenience init(from user: DataKit.User, isFavorite: Bool = false) {
         self.init(
             id: user.id,
             firstName: user.firstName,
@@ -20,12 +20,13 @@ extension Prospect {
             postcode: user.postcode,
             streetName: user.streetName,
             streetNumber: user.streetNumber,
-            cell: user.cell
+            cell: user.cell,
+            isFavorite: isFavorite
         )
     }
 
-    var toUser: User {
-        User(
+    var toUser: DataKit.User {
+        DataKit.User(
             id: id,
             firstName: firstName,
             lastName: lastName,
@@ -47,3 +48,4 @@ extension Prospect {
         )
     }
 }
+

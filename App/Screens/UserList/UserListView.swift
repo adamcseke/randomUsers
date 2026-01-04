@@ -15,28 +15,49 @@ struct UserListView: View {
     @EnvironmentObject private var notification: SystemNotificationContext
 
     @Environment(\.modelContext) var modelContext
-    @Query(sort: \Prospect.id) var prospects: [Prospect]
+    @Query(sort: \CachedUser.id) var cachedUsers: [CachedUser]
+    @Query(filter: #Predicate<CachedUser> { $0.isFavorite == true }, sort: \CachedUser.id) var favoriteUsers: [CachedUser]
 
     @State private var viewModel = UserListViewModel()
-    @State private var showSavedUsersOnly: Bool = false
+    @State private var showOnlyFavoriteUsers: Bool = false
 
     private var displayedUsers: [User] {
-        if showSavedUsersOnly {
-            prospects.map { $0.toUser }
+        if showOnlyFavoriteUsers {
+            favoriteUsers.map { $0.toUser }
         } else {
-            viewModel.users
+            if viewModel.isOffline {
+                cachedUsers.map { $0.toUser }
+            } else {
+                viewModel.users
+            }
         }
     }
     
     private var savedUsersSubtitleText: Text {
         let formatString = String(localized: "userList.savedUsersSubtitle")
-        let formattedString = String.localizedStringWithFormat(formatString, prospects.count)
+        let formattedString = String.localizedStringWithFormat(formatString, favoriteUsers.count)
         return Text(formattedString)
     }
 
     private var usersStateSwitchNotificationContent: some View {
         SystemNotificationMessage(
-            text: showSavedUsersOnly ? "userList.notification.allUsers.title" : "userList.notification.onlySavedUsers.title"
+            text: showOnlyFavoriteUsers ? "userList.notification.allUsers.title" : "userList.notification.favoriteUsers.title"
+        )
+        .systemNotificationMessageStyle(.success)
+    }
+    
+    private var offlineNotificationContent: some View {
+        SystemNotificationMessage(
+            title: "userList.notification.offlineMode.title",
+            text: "userList.notification.offlineMode.message"
+        )
+        .systemNotificationMessageStyle(.warning)
+    }
+    
+    private var onlineNotificationContent: some View {
+        SystemNotificationMessage(
+            title: "userList.notification.onlineMode.title",
+            text: "userList.notification.onlineMode.message"
         )
         .systemNotificationMessageStyle(.success)
     }
@@ -47,22 +68,28 @@ struct UserListView: View {
                 UserRow(user: user)
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
-                            if let existingProspect = prospects.first(where: { $0.id == user.id }) {
-                                modelContext.delete(existingProspect)
+                            if let cachedUser = cachedUsers.first(where: { $0.id == user.id }) {
+                                cachedUser.isFavorite = false
                             }
                         }
                     }
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
                         Button(role: .confirm) {
-                            let prospect = Prospect(from: user)
-                            modelContext.insert(prospect)
+                            if let cachedUser = cachedUsers.first(where: { $0.id == user.id }) {
+                                cachedUser.isFavorite = true
+                            } else {
+                                let newUser = CachedUser(from: user, isFavorite: true)
+                                modelContext.insert(newUser)
+                            }
                         } label: {
                             Text(Localization.addToFavorites)
                         }
                         .tint(Color.green)
                     }
                     .onAppear {
-                        viewModel.loadNextIfNeeded(listItem: user)
+                        if !viewModel.isOffline {
+                            viewModel.loadNextIfNeeded(listItem: user)
+                        }
                     }
             }
             if viewModel.isLoading {
@@ -74,10 +101,17 @@ struct UserListView: View {
         }
         .accessibilityIdentifier(Identifiers.listIdentifier)
         .refreshable {
-            viewModel.fetchUsers()
+            if !viewModel.isOffline {
+                viewModel.fetchUsers()
+            }
         }
         .onAppear {
-            viewModel.fetchUsers()
+            if !viewModel.isOffline {
+                viewModel.fetchUsers()
+            }
+        }
+        .onChange(of: viewModel.users) { oldValue, newValue in
+            cacheUsers(newValue)
         }
         .navigationTitle(Localization.title)
         .navigationSubtitle(savedUsersSubtitleText)
@@ -85,25 +119,56 @@ struct UserListView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Button(action: {
-                        showSavedUsersOnly.toggle()
+                        showOnlyFavoriteUsers.toggle()
                     }, label: {
-                        Label(showSavedUsersOnly ? Localization.showAllUsers : Localization.showOnlySavedUsers, systemImage: "filter")
+                        Label(showOnlyFavoriteUsers ? Localization.showAllUsers : Localization.showOnlySavedUsers, systemImage: "filter")
                     })
                     .accessibilityIdentifier(Identifiers.moreButtonIdentifier)
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
             }
+            ToolbarItem(placement: .topBarLeading) {
+                Group {
+                    if viewModel.isLoading || viewModel.isPgainationLoading {
+                        ProgressView()
+                            .tint(Color.primaryOrange)
+                            .progressViewStyle(.circular)
+                    } else {
+                        EmptyView()
+                    }
+                }
+            }
         }
-        .onChange(of: showSavedUsersOnly) { oldValue, newValue in
+        .onChange(of: showOnlyFavoriteUsers) { oldValue, newValue in
             notification.present {
                 usersStateSwitchNotificationContent
+            }
+        }
+        .onChange(of: viewModel.isOffline) { oldValue, newValue in
+            if newValue {
+                notification.present {
+                    offlineNotificationContent
+                }
+            } else if oldValue {
+                notification.present {
+                    onlineNotificationContent
+                }
             }
         }
     }
 }
 
 extension UserListView {
+    private func cacheUsers(_ users: [User]) {
+        for user in users {
+            if cachedUsers.first(where: { $0.id == user.id }) == nil {
+                let cachedUser = CachedUser(from: user, isFavorite: false)
+                modelContext.insert(cachedUser)
+            }
+        }
+    }
+    
     private enum Localization {
         static let title = String(localized: "userList.title")
         static let addToFavorites = String(localized: "userList.addToFavorites")
@@ -122,5 +187,5 @@ extension UserListView {
     NavigationStack {
         UserListView()
     }
-    .modelContainer(for: Prospect.self)
+    .modelContainer(for: CachedUser.self)
 }

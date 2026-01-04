@@ -10,6 +10,7 @@
 		371193E42F0406DF00C7CDC0 /* Factory in Frameworks */ = {isa = PBXBuildFile; productRef = 371193E32F0406DF00C7CDC0 /* Factory */; };
 		371194522F084DC700C7CDC0 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 371194512F084DC700C7CDC0 /* SDWebImageSwiftUI */; };
 		37636F082F0A65E000AE9022 /* SystemNotification in Frameworks */ = {isa = PBXBuildFile; productRef = 37636F072F0A65E000AE9022 /* SystemNotification */; };
+		37636F1B2F0A933100AE9022 /* SystemKit in Frameworks */ = {isa = PBXBuildFile; productRef = 37636F1A2F0A933100AE9022 /* SystemKit */; };
 		37D0E9F52F0944E400F7C158 /* DataKit in Frameworks */ = {isa = PBXBuildFile; productRef = 37D0E9F42F0944E400F7C158 /* DataKit */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,16 @@
 		371193B32F0406A000C7CDC0 /* RandomUsersUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RandomUsersUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		37636F182F0A903100AE9022 /* Exceptions for "Packages" folder in "RandomUsers" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SystemKit,
+			);
+			target = 371193992F04069F00C7CDC0 /* RandomUsers */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3711939C2F04069F00C7CDC0 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -54,6 +65,9 @@
 		};
 		371194D82F093F9D00C7CDC0 /* Packages */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				37636F182F0A903100AE9022 /* Exceptions for "Packages" folder in "RandomUsers" target */,
+			);
 			path = Packages;
 			sourceTree = "<group>";
 		};
@@ -65,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37D0E9F52F0944E400F7C158 /* DataKit in Frameworks */,
+				37636F1B2F0A933100AE9022 /* SystemKit in Frameworks */,
 				371194522F084DC700C7CDC0 /* SDWebImageSwiftUI in Frameworks */,
 				37636F082F0A65E000AE9022 /* SystemNotification in Frameworks */,
 				371193E42F0406DF00C7CDC0 /* Factory in Frameworks */,
@@ -134,6 +149,7 @@
 				371194512F084DC700C7CDC0 /* SDWebImageSwiftUI */,
 				37D0E9F42F0944E400F7C158 /* DataKit */,
 				37636F072F0A65E000AE9022 /* SystemNotification */,
+				37636F1A2F0A933100AE9022 /* SystemKit */,
 			);
 			productName = RandomUsers;
 			productReference = 3711939A2F04069F00C7CDC0 /* RandomUsers.app */;
@@ -222,6 +238,7 @@
 				371194502F084DC700C7CDC0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				37D0E9F32F0944E400F7C158 /* XCLocalSwiftPackageReference "Packages/DataKit" */,
 				37636F062F0A65E000AE9022 /* XCRemoteSwiftPackageReference "SystemNotification" */,
+				37636F192F0A933100AE9022 /* XCLocalSwiftPackageReference "Packages/SystemKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3711939B2F04069F00C7CDC0 /* Products */;
@@ -645,6 +662,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		37636F192F0A933100AE9022 /* XCLocalSwiftPackageReference "Packages/SystemKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/SystemKit;
+		};
 		37D0E9F32F0944E400F7C158 /* XCLocalSwiftPackageReference "Packages/DataKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/DataKit;
@@ -693,6 +714,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 37636F062F0A65E000AE9022 /* XCRemoteSwiftPackageReference "SystemNotification" */;
 			productName = SystemNotification;
+		};
+		37636F1A2F0A933100AE9022 /* SystemKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SystemKit;
 		};
 		37D0E9F42F0944E400F7C158 /* DataKit */ = {
 			isa = XCSwiftPackageProductDependency;

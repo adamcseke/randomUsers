@@ -7,11 +7,18 @@
 
 import DataKit
 import Factory
+import SystemKit
 
 extension Container {
     var networkManager: Factory<NetworkManagerProtocol> {
         self { @MainActor in
             NetworkManager()
+        }.singleton
+    }
+
+    var networkMonitor: Factory<NetworkMonitorProtocol> {
+        self { @MainActor in
+            NetworkMonitor()
         }.singleton
     }
 }
